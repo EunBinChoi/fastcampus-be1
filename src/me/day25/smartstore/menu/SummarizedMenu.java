@@ -4,6 +4,7 @@ import me.day25.smartstore.customers.ClassifiedCustomersGroup;
 import me.day25.smartstore.customers.Customer;
 import me.day25.smartstore.customers.Customers;
 import me.day25.smartstore.exception.InputEmptyException;
+import me.day25.smartstore.exception.InputEndException;
 import me.day25.smartstore.exception.InputRangeException;
 import me.day25.smartstore.util.Message;
 
@@ -95,7 +96,7 @@ public class SummarizedMenu extends Menu {
 
     public void manageSort(Comparator<Customer> comparator) {
         while (true) {
-            String strOrder = chooseSortOrder().toUpperCase();
+            String strOrder = chooseSortOrder();
             if (strOrder.equals(Message.END_MSG)) return;
 
             try {
@@ -117,10 +118,10 @@ public class SummarizedMenu extends Menu {
             try {
                 System.out.println("\n** Press 'end', if you want to exit! **");
                 System.out.print("Which order (ASCENDING (A), DESCENDING (D))? ");
-                String choice = nextLine().toUpperCase();
+                String choice = nextLine(Message.END_MSG);
 
                 if (choice.equals("")) throw new InputEmptyException();
-                if (choice.equals(Message.END_MSG)) return choice;
+                //if (choice.equals(Message.END_MSG)) return choice;
 
                 try {
                     OrderType orderType = OrderType.valueOf(choice).replaceFullName();
@@ -137,6 +138,9 @@ public class SummarizedMenu extends Menu {
                 System.out.println(Message.ERR_MSG_INVALID_INPUT_NULL);
             } catch (InputRangeException e) {
                 System.out.println(Message.ERR_MSG_INVALID_INPUT_RANGE);
+            } catch (InputEndException e) {
+                System.out.println(Message.ERR_MSG_INPUT_END);
+                return null;
             }
         }
     }

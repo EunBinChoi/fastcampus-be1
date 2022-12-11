@@ -1,5 +1,6 @@
 package me.day25.smartstore.menu;
 
+import me.day25.smartstore.exception.InputEndException;
 import me.day25.smartstore.exception.InputRangeException;
 import me.day25.smartstore.util.Message;
 
@@ -25,7 +26,16 @@ public class Menu {
     protected Scanner scanner = new Scanner(System.in);
 
     public String nextLine() {
-        String str = scanner.nextLine(); // 1 1 => wrong input
+        String str = scanner.nextLine().toUpperCase();
+        String[] strings = str.split("\\s");
+        return (strings.length > 1) ? "" : str;
+    }
+
+    public String nextLine(String messageForEnd) throws InputEndException {
+        System.out.println("\n** Press 'end', if you want to exit! **");
+        String str = scanner.nextLine().toUpperCase();
+        if (str.equals(messageForEnd)) throw new InputEndException();
+
         String[] strings = str.split("\\s");
         return (strings.length > 1) ? "" : str;
     }

@@ -2,6 +2,7 @@ package me.day25.smartstore;
 
 import me.day25.smartstore.customers.Customer;
 import me.day25.smartstore.customers.Customers;
+import me.day25.smartstore.exception.InputEndException;
 import me.day25.smartstore.groups.Group;
 import me.day25.smartstore.groups.GroupType;
 import me.day25.smartstore.groups.Groups;

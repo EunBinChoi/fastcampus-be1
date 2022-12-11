@@ -3,6 +3,7 @@ package me.day25.smartstore.menu;
 import me.day25.smartstore.customers.Customer;
 import me.day25.smartstore.customers.Customers;
 import me.day25.smartstore.exception.InputEmptyException;
+import me.day25.smartstore.exception.InputEndException;
 import me.day25.smartstore.exception.InputRangeException;
 import me.day25.smartstore.groups.Group;
 import me.day25.smartstore.groups.GroupType;
@@ -36,10 +37,9 @@ public class GroupMenu extends Menu {
     public String chooseGroup() {
         while (true) {
             try {
-                // TODO: end => exit()
-                System.out.println("\n** Press 'end', if you want to exit! **");
+                //System.out.println("\n** Press 'end', if you want to exit! **");
                 System.out.print("Which group (GENERAL (G), VIP (V), VVIP (VV))? ");
-                String choice = nextLine().toUpperCase();
+                String choice = nextLine(Message.END_MSG);
 
                 if (choice.equals("")) throw new InputEmptyException();
                 return choice;
@@ -48,6 +48,9 @@ public class GroupMenu extends Menu {
                 System.out.println(Message.ERR_MSG_INVALID_INPUT_NULL);
             } catch (IllegalArgumentException e) {
                 System.out.println(Message.ERR_MSG_INVALID_INPUT_RANGE);
+            } catch (InputEndException e) {
+                System.out.println(Message.ERR_MSG_INPUT_END);
+                return null;
             }
         }
     }
@@ -99,7 +102,7 @@ public class GroupMenu extends Menu {
     public void setParameter() {
         while (true) {
             String strGroup = chooseGroup(); // "V", "VIP" (string) => GroupType.VIP
-            if (strGroup.equals(Message.END_MSG)) return;
+            if (strGroup == null) return;
 
             GroupType groupType;
             try {
@@ -136,9 +139,7 @@ public class GroupMenu extends Menu {
     public void viewParameter() {
         while (true) {
             String strGroup = chooseGroup();
-            if (strGroup.equals(Message.END_MSG)) {
-                return;
-            }
+            if (strGroup == null) return;
 
             GroupType groupType;
             try {
@@ -157,9 +158,7 @@ public class GroupMenu extends Menu {
     public void updateParameter() {
         while (true) {
             String strGroup = chooseGroup();
-            if (strGroup.equals(Message.END_MSG)) {
-                return;
-            }
+            if (strGroup == null) return;
 
             GroupType groupType;
             try {
@@ -225,7 +224,7 @@ public class GroupMenu extends Menu {
         while (true) {
             try {
                 System.out.print("\nInput Minimum Spent Time: ");
-                int minimumSpentTime = Integer.parseInt(nextLine());
+                int minimumSpentTime = Integer.parseInt(nextLine(Message.END_MSG));
                 if (minimumSpentTime < 0) throw new InputRangeException();
 
                 param.setMinimumSpentTime(minimumSpentTime);
@@ -234,6 +233,9 @@ public class GroupMenu extends Menu {
                 System.out.println(Message.ERR_MSG_INVALID_INPUT_TYPE);
             } catch (InputRangeException e) {
                 System.out.println(Message.ERR_MSG_INVALID_INPUT_RANGE);
+            } catch (InputEndException e) {
+                System.out.println(Message.ERR_MSG_INPUT_END);
+                return;
             }
         }
 
@@ -251,15 +253,17 @@ public class GroupMenu extends Menu {
         while (true) {
             try {
                 System.out.print("\nInput Minimum Total Pay: ");
-                int minimumTotalPay = Integer.parseInt(nextLine());
+                int minimumTotalPay = Integer.parseInt(nextLine(Message.END_MSG));
                 if (minimumTotalPay < 0) throw new InputRangeException();
-
                 param.setMinimumTotalPay(minimumTotalPay);
                 return;
             } catch (NumberFormatException e) {
                 System.out.println(Message.ERR_MSG_INVALID_INPUT_TYPE);
             } catch (InputRangeException e) {
                 System.out.println(Message.ERR_MSG_INVALID_INPUT_RANGE);
+            } catch (InputEndException e) {
+                System.out.println(Message.ERR_MSG_INPUT_END);
+                return;
             }
         }
 
@@ -276,7 +280,7 @@ public class GroupMenu extends Menu {
         while (true) {
             try {
                 System.out.print("\n" + message);
-                int input = Integer.parseInt(nextLine());
+                int input = Integer.parseInt(nextLine(Message.END_MSG));
                 if (input < 0) throw new InputRangeException();
                 method.invoke(parameter, input);
                 return;
@@ -284,6 +288,9 @@ public class GroupMenu extends Menu {
                 System.out.println(Message.ERR_MSG_INVALID_INPUT_FORMAT);
             } catch (InputRangeException e) {
                 System.out.println(Message.ERR_MSG_INVALID_INPUT_RANGE);
+            } catch (InputEndException e) {
+                System.out.println(Message.ERR_MSG_INPUT_END);
+                return;
             } catch (InvocationTargetException e) {
                 throw new RuntimeException(e);
             } catch (IllegalAccessException e) {
